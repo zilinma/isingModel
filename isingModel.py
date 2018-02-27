@@ -1,10 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import csv
+
 
 SIZE = 100
-STEPS = 300
-T = 2
-
+STEPS = 2000
+T = 2.35
+PATH = './data'
 lattice = np.full((SIZE, SIZE), 1)
 
 
@@ -62,24 +64,29 @@ def step(lattice):
                 lattice[pos[0]][pos[1]] *= -1
 
 
-def writeEandMTo():
-    '''
-        Write to something
-    '''
 
 energies = np.zeros(STEPS)
 mags = np.zeros(STEPS)
-for i in range(STEPS):
-    step(lattice)
-    E = totalEnergy(lattice)
-    M = totalMag(lattice)
-    energies[i] = E
-    mags[i] = M
-    #if i %100 == 0:
-    print("Step:", i)
-    print("total energy", E)
-    print("total magnetization", M)
+with open(PATH +'/' +str(T) + '_' + str(SIZE) + '_'+ str(STEPS)+'.csv', 'w', newline='') as csvfile:
+    testWriter = csv.writer(csvfile, delimiter=' ',
+                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    testWriter.writerow(["Step", "Energy", "Magnetization"])
+    for i in range(STEPS):
+        step(lattice)
+        E = totalEnergy(lattice)
+        M = totalMag(lattice)
+        energies[i] = E
+        mags[i] = M
+        testWriter.writerow([i,E, M])
+        #if i %100 == 0:
+        print("Step:", i)
+        print("total energy", E)
+        print("total magnetization", M)
 
+np.average(energies[70:])
+np.average(mags[70:])
+np.std(energies[70:])
+np.std(mags[70:])
 
 
 f, ax1 = plt.subplots(1, 2, figsize=(7, 3))
