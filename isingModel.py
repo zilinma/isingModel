@@ -1,14 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
-
+import time
 
 SIZE = 100
 STEPS = 2000
-T = 2.35
+T = 2.31
 PATH = './data'
 lattice = np.full((SIZE, SIZE), 1)
-
+energyIncrement = {4: np.exp(-4/T), 8:np.exp(-8/T)}
 
 def nearestNeighbor(lattice, row, col):
     '''
@@ -48,6 +48,7 @@ def step(lattice):
     '''
         Step once Monte Carlo step
     '''
+
     for i in range(SIZE ** 2):
 
         # flip
@@ -59,7 +60,10 @@ def step(lattice):
         after = nearestNeighbor(lattice, pos[0], pos[1])            # eee
         if after > before:
             dE = after - before
-            prob = np.exp(-dE/T)
+
+
+            prob = energyIncrement[dE]
+
             if (np.random.sample(1) >= prob):
                 lattice[pos[0]][pos[1]] *= -1
 
@@ -72,7 +76,10 @@ with open(PATH +'/' +str(T) + '_' + str(SIZE) + '_'+ str(STEPS)+'.csv', 'w', new
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
     testWriter.writerow(["Step", "Energy", "Magnetization"])
     for i in range(STEPS):
+        timerStart = time.time()
         step(lattice)
+        timerEnd = time.time()
+        print("Elpsed", timerEnd - timerStart)
         E = totalEnergy(lattice)
         M = totalMag(lattice)
         energies[i] = E
