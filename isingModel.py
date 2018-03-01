@@ -4,7 +4,7 @@ import csv
 
 
 SIZE = 100
-STEPS = 2000
+STEPS = 10000
 T = 2.35
 PATH = './data'
 lattice = np.full((SIZE, SIZE), 1)
