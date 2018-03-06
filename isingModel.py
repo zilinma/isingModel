@@ -5,11 +5,12 @@ import time
 
 SIZE = 100
 
-STEPS = 2000
-T = 2.31
+STEPS = 4000
+T = 1.9
 PATH = './data'
 lattice = np.full((SIZE, SIZE), 1)
 energyIncrement = {4: np.exp(-4/T), 8:np.exp(-8/T)}
+
 
 def nearestNeighbor(lattice, row, col):
     '''
@@ -69,37 +70,45 @@ def step(lattice):
                 lattice[pos[0]][pos[1]] *= -1
 
 
+def runIsing():
+    energies = np.zeros(STEPS)
+    mags = np.zeros(STEPS)
+    with open(PATH +'/' +str(round(T, 2)) + '_' + str(SIZE) + '_'+ str(STEPS)+'.csv', 'w', newline='') as csvfile:
+        testWriter = csv.writer(csvfile, delimiter=' ',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        testWriter.writerow(["Step", "Energy", "Magnetization"])
+        for i in range(STEPS):
+            #timerStart = time.time()
+            step(lattice)
+            #timerEnd = time.time()
+            #print("Elpsed", timerEnd - timerStart)
+            E = totalEnergy(lattice)
+            M = totalMag(lattice)
+            energies[i] = E
+            mags[i] = M
+            testWriter.writerow([i,E, M])
+            #if i %100 == 0:
+            print("Step:", i)
+            print("total energy", E)
+            print("total magnetization", M)
 
-energies = np.zeros(STEPS)
-mags = np.zeros(STEPS)
-with open(PATH +'/' +str(T) + '_' + str(SIZE) + '_'+ str(STEPS)+'.csv', 'w', newline='') as csvfile:
-    testWriter = csv.writer(csvfile, delimiter=' ',
-                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    testWriter.writerow(["Step", "Energy", "Magnetization"])
-    for i in range(STEPS):
-        timerStart = time.time()
-        step(lattice)
-        timerEnd = time.time()
-        print("Elpsed", timerEnd - timerStart)
-        E = totalEnergy(lattice)
-        M = totalMag(lattice)
-        energies[i] = E
-        mags[i] = M
-        testWriter.writerow([i,E, M])
-        #if i %100 == 0:
-        print("Step:", i)
-        print("total energy", E)
-        print("total magnetization", M)
+    np.average(energies[70:])
+    np.average(mags[70:])
+    np.std(energies[70:])
+    np.std(mags[70:])
 
-np.average(energies[70:])
-np.average(mags[70:])
-np.std(energies[70:])
-np.std(mags[70:])
-
-
+'''
 f, ax1 = plt.subplots(1, 2, figsize=(7, 3))
 
 ax1[0].plot(energies)
 ax1[1].plot(mags)
 
 plt.show()
+
+'''
+for i in range(30):
+
+    runIsing()
+    T += 0.01
+    lattice = np.full((SIZE, SIZE), 1)
+    energyIncrement = {4: np.exp(-4 / T), 8: np.exp(-8 / T)}
