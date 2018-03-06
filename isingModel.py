@@ -92,10 +92,8 @@ def runIsing():
             print("total energy", E)
             print("total magnetization", M)
 
-    np.average(energies[70:])
-    np.average(mags[70:])
-    np.std(energies[70:])
-    np.std(mags[70:])
+    with open(PATH + '/matrixes' +'/' +str(round(T, 2)) + '_' + str(SIZE) + '_'+ str(STEPS), 'w', newline='') as file:
+        np.save(file, lattice)
 
 '''
 f, ax1 = plt.subplots(1, 2, figsize=(7, 3))
@@ -109,6 +107,9 @@ plt.show()
 for i in range(30):
 
     runIsing()
+
+
     T += 0.01
     lattice = np.full((SIZE, SIZE), 1)
     energyIncrement = {4: np.exp(-4 / T), 8: np.exp(-8 / T)}
+
