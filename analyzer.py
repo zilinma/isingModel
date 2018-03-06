@@ -10,12 +10,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 SIZE = 100
-STEPS = 2000
+STEPS = 20000
 START = 200
 END = 1000
-T = 2.2
+T = 2.25
 PATH = './data'
 magnetization = np.zeros(STEPS)
+energy = np.zeros(STEPS)
 
 def coralation(mag,i):
     a = mag[START:END]
@@ -28,8 +29,8 @@ with open(PATH +'/' +str(T) + '_' + str(SIZE) + '_'+ str(STEPS)+'.csv', 'r', new
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
     next(testReader, None)  # skip the headers
     for i,row in enumerate(testReader):
-        magnetization[i] = float(row[1])
-
+        magnetization[i] = float(row[2])
+        energy[i] = float(row[1])
 co = np.zeros(STEPS - END)
 for i in range(STEPS - END):
     co[i] = coralation(magnetization, i)
@@ -40,3 +41,9 @@ ax1[0].plot(co)
 ax1[1].plot(magnetization)
 plt.axhline()
 plt.show()
+
+print(np.mean(magnetization[2000:]))
+print(np.mean(energy[2000:]))
+print(np.var(magnetization[2000:]))
+
+print(np.var(energy[2000:]))
