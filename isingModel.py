@@ -3,14 +3,18 @@ import matplotlib.pyplot as plt
 import csv
 import time
 
-SIZE = 100
+SIZE = 100      # size of the lattice
 
-STEPS = 4000
-T = 1.9
-PATH = './data'
-lattice = np.full((SIZE, SIZE), 1)
+STEPS = 4000    # number of MC steps
+T = 1.9         # reduced temperature
+PATH = './data' # path to the data. Should mkdir one if doesn't exist.
+lattice = np.full((SIZE, SIZE), 1)  # initialize lattice
+
+'''
+    Defines probability for flipping. There are only 5 change in
+    energies and only 2 of them are positive (makes the energy go up).
+'''
 energyIncrement = {4: np.exp(-4/T), 8:np.exp(-8/T)}
-
 
 def nearestNeighbor(lattice, row, col):
     '''
@@ -28,7 +32,7 @@ def nearestNeighbor(lattice, row, col):
 
 def totalEnergy(lattice):
     '''
-        Calcualte the total energy
+        Calcualte the total energy. Using the rolling method from James
     '''
     r = np.roll(lattice, 1, axis=1)  # roll right
     d = np.roll(lattice, 1, axis=0)  # roll down
@@ -38,17 +42,15 @@ def totalEnergy(lattice):
 def totalMag(lattice):
     '''
     Calculates the total magnetization
-    :param lattice:
+    :param lattice
     :return:
     '''
     mag = np.sum(lattice) / SIZE ** 2
-
-
     return mag
 
 def step(lattice):
     '''
-        Step once Monte Carlo step
+        Step one Monte Carlo step
     '''
 
     for i in range(SIZE ** 2):
@@ -59,7 +61,7 @@ def step(lattice):
 
         before = nearestNeighbor(lattice, pos[0], pos[1])
         lattice[pos[0]][pos[1]] *= -1
-        after = nearestNeighbor(lattice, pos[0], pos[1])            # eee
+        after = nearestNeighbor(lattice, pos[0], pos[1])
         if after > before:
             dE = after - before
 
@@ -71,6 +73,18 @@ def step(lattice):
 
 
 def runIsing():
+    """
+    Runs ising model and save the data to different files.
+    CSV data for magnetization and energy --
+        Naming convention:
+            T_SIZE_STEPS.csv
+
+    Lattice data after each finished run --
+        Naming convention:
+            T_SIZE_STEPS.npy     -> numpy arrays pickle file. np.load will load these.
+            T_SIZE_STEPS.txt     -> human readable txt files.
+    :return:
+    """
     energies = np.zeros(STEPS)
     mags = np.zeros(STEPS)
     with open(PATH +'/' +str(round(T, 2)) + '_' + str(SIZE) + '_'+ str(STEPS)+'.csv', 'w', newline='') as csvfile:
@@ -105,11 +119,11 @@ plt.show()
 
 '''
 for i in range(30):
-
+    '''
+        runs ising models in multiple runs. Good for overnight experiments.
+    '''
     runIsing()
-
-
-    T += 0.01
-    lattice = np.full((SIZE, SIZE), 1)
-    energyIncrement = {4: np.exp(-4 / T), 8: np.exp(-8 / T)}
+    T += 0.01               # update T
+    lattice = np.full((SIZE, SIZE), 1)          # initialize lattice
+    energyIncrement = {4: np.exp(-4 / T), 8: np.exp(-8 / T)}            # initialize energy increments
 

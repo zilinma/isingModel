@@ -1,7 +1,7 @@
 '''
-Calculate co
-
-
+    This file calculates coralation, plots magnetization, energy and coralations.
+    Specify constants before run. Refer to ./isingModel.py for file naming conventions
+    and where data are.
 '''
 
 
@@ -21,10 +21,15 @@ magnetization = np.zeros(STEPS)
 energy = np.zeros(STEPS)
 
 def coralation(mag,i):
+    '''
+    Calculates coralation between different iterations.
+    :param mag: total magnetization
+    :param i: iteration helper variable
+    :return: coralation at START + i to END + i
+    '''
     a = mag[START:END]
     b = mag[START + i:END + i]
     return (np.mean(b*a) - np.mean(a) * np.mean(b))/(np.std(a) * np.std(b))
-
 
 with open(PATH +'/' +str(T) + '_' + str(SIZE) + '_'+ str(STEPS)+'.csv', 'r', newline='') as csvfile:
     testReader = csv.reader(csvfile, delimiter=' ',
@@ -33,6 +38,7 @@ with open(PATH +'/' +str(T) + '_' + str(SIZE) + '_'+ str(STEPS)+'.csv', 'r', new
     for i,row in enumerate(testReader):
         magnetization[i] = float(row[2])
         energy[i] = float(row[1])
+
 co = np.zeros(STEPS - END)
 for i in range(STEPS - END):
     co[i] = coralation(magnetization, i)
