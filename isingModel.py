@@ -1,3 +1,6 @@
+'''
+The main part of the MC simulation.
+'''
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
@@ -39,7 +42,10 @@ def nearestNeighbor(lattice, row, col):
 
 def totalEnergy(lattice):
     '''
-        Calcualte the total energy. Using the rolling method from James
+        Calcualte the total energy. Using the rolling method from James.
+        Not significant speed up since energy is not frequently calculated. 
+        Plus np.roll for higher dimentions calls np.roll on the flattened 
+        matrixed for multiple times. 
     '''
     r = np.roll(lattice, 1, axis=1)  # roll right
     d = np.roll(lattice, 1, axis=0)  # roll down
