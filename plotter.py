@@ -1,11 +1,11 @@
 '''
     This code plots our final results from the experiment.
     We have a pretty good M data and predicted fairly well of the
-    critical temperature. After sampling our E data, we get a derivative
+    critical temperature (see results.pdf). After sampling our E data
+    (rather than taking all of the data points), we get a derivative
     that fits more about the theoretical value of dE/dt, which has a sharp
-    peak at the critical temperature.
-
-
+    peak at the critical temperature, after which the heat capacity
+    suddenly changes. 
 '''
 
 
