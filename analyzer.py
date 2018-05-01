@@ -22,6 +22,8 @@ energy = np.zeros(STEPS)
 
 def coralation(mag,i):
     '''
+    This coralation function is not working unless a very very large iteration is put into
+    consideration, usually more than 10,000 MC steps. 
     Calculates coralation between different iterations.
     :param mag: total magnetization
     :param i: iteration helper variable
