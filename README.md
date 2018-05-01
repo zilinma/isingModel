@@ -1,5 +1,5 @@
 # isingModel
-IsingModel
+IsingModel Partner: Payton & Danbee
 
 Computation project. Simulates Ising
 Model and obtain critical temperature
