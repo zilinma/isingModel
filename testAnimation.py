@@ -1,5 +1,5 @@
 """
-A simple example of an animated plot.
+A simple example of an animated plot. (Doesn't work yet)
 """
 import numpy as np
 import matplotlib.pyplot as plt
