@@ -5,7 +5,12 @@
     (rather than taking all of the data points), we get a derivative
     that fits more about the theoretical value of dE/dt, which has a sharp
     peak at the critical temperature, after which the heat capacity
-    suddenly changes. 
+    suddenly changes. In the future, we will consider adding the clustering 
+    method for better efficiency near the critical temperature. This clustering 
+    method can help us sample states in a cluster, which avoids sampling 
+    spins that are very unlikely to flip. We should also expand our lattice
+    to larger size, even higher dimensions. We can also consider more fun stuff
+    by introducing external magnetic field.
 '''
 
 
