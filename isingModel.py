@@ -13,12 +13,19 @@ lattice = np.full((SIZE, SIZE), 1)  # initialize lattice
 '''
     Defines probability for flipping. There are only 5 change in
     energies and only 2 of them are positive (makes the energy go up).
+    This change makes decent speed up, roughtly about 20%. As for speed
+    up, np is doing a good job by computing all of the matrixes in more
+    efficient languages i.e. C family. 
 '''
 energyIncrement = {4: np.exp(-4/T), 8:np.exp(-8/T)}
 
 def nearestNeighbor(lattice, row, col):
     '''
     Calculate nearest neighbor
+    Neighbors are defined as
+        UP
+    LEFT  RIGHT
+       DOWN
     :param lattice: spin lattice
     :param row:
     :param col:
@@ -42,6 +49,7 @@ def totalEnergy(lattice):
 def totalMag(lattice):
     '''
     Calculates the total magnetization
+    just the sum of all M moments then normalize.
     :param lattice
     :return:
     '''
@@ -50,7 +58,7 @@ def totalMag(lattice):
 
 def step(lattice):
     '''
-        Step one Monte Carlo step
+        Step Monte Carlo for 1 step
     '''
 
     for i in range(SIZE ** 2):
@@ -61,11 +69,10 @@ def step(lattice):
 
         before = nearestNeighbor(lattice, pos[0], pos[1])
         lattice[pos[0]][pos[1]] *= -1
+        
         after = nearestNeighbor(lattice, pos[0], pos[1])
         if after > before:
             dE = after - before
-
-
             prob = energyIncrement[dE]
 
             if (np.random.sample(1) >= prob):
